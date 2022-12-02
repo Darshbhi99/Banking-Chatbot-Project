@@ -24,8 +24,8 @@ class preprocessing():
     def preprocessing_data(self, sentence:str)->str:
         try:
             self.sentence = sentence
-            ques = self.tfv.transform([self.clean(sentence)])
-            class_ = self.le.inverse_transform(self.model.predict(ques))
-            return class_[0]
+            self.ques = self.tfv.transform([self.clean(sentence)])
+            class_ = self.le.inverse_transform(self.model.predict(self.ques))
+            return self.ques, class_[0]
         except Exception as e:
             raise SystemError(e, sys)

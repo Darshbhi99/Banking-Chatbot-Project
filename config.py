@@ -16,6 +16,7 @@ class app_config():
                         database = read[4])
             print('MYSQL is connected successfully')
             self.path = os.path.join(os.getcwd(), "static",'BankFAQs.csv')
+            self.upath = os.path.join(os.getcwd(), 'static', 'userdata.csv')
         except Exception as e:
             raise SystemError(e, sys)
     

@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 mysqldata.txt
+userdata_config.py
 # C extensions
 *.so
 
