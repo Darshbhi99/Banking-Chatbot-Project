@@ -16,14 +16,16 @@ import sys,os
 #     raise SystemError(e, sys)
 
 # Reading the Data from csv file 
+path = os.path.join(os.getcwd(), "static",'BankFAQs.csv')
+upath = os.path.join(os.getcwd(), 'static', 'userdata.csv')
 try:
-    obj = app_config()
-    data = pd.read_csv(obj.path)
+    # obj = app_config()
+    data = pd.read_csv(path)
     prep = preprocessing()
     x = pd.DataFrame(columns=['First Name', 'Last Name', 'Phone Number', 'Email id'])
     upath = os.path.join(os.getcwd(), 'static', 'userdata.csv')
     x.to_csv(upath, index=False)
-    user = pd.read_csv(obj.upath)
+    user = pd.read_csv(upath)
 except Exception as e:
     raise SystemError(e, sys)
 
@@ -44,7 +46,7 @@ def confirm():
         question = request.args.get('question')
         if phone not in user['Phone Number'].values:
             user.loc[len(user.index)+1] = [fname, lname, phone, email]
-            user.to_csv(obj.upath, index=False)
+            user.to_csv(upath, index=False)
         global pred_class
         t_usr, pred_class = prep.preprocessing_data(question)
         global quest_lst 
