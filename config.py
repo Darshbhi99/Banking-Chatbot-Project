@@ -7,7 +7,7 @@ import os, sys
 class app_config():
     def __init__(self):
         try:
-            f = open('mysqldata.txt').read()
+            f = open('constant/mysqldata.txt').read()
             read = f.split()
             self.mydb = connector.connect(
                         host = read[0],

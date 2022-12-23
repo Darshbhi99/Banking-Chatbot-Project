@@ -21,7 +21,6 @@ import sys,os
 
 # -----------Reading the Data from csv file ---------------------------------------
 try:
-    # obj = app_config()
     data = pd.read_csv(path)
     prep = preprocessing()
     user = pd.read_csv(upath)
@@ -45,7 +44,7 @@ def confirm():
         phone = request.args.get('phone')
         email = request.args.get('email')
         question = request.args.get('question')
-        if phone not in user['Phone Number'].values:
+        if int(phone) not in user['Phone Number'].values:
             user.loc[len(user.index)+1] = [fname, lname, phone, email]
             user.to_csv(upath, index=False)
         global pred_class
