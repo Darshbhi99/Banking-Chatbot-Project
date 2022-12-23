@@ -1,13 +1,14 @@
 from flask import Flask, render_template, request
 from config import app_config 
 from exception import SystemError
+from constant import upath, path
 from data_preprocessing import preprocessing
 from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
 import numpy as np
 import sys,os
 
-# Connecting the MySQL Database to FLASK App
+# -----------Connecting the MySQL Database to FLASK App---------------------------
 # try:
 #     obj = app_config()
 #     mydb = obj.mydb
@@ -15,27 +16,27 @@ import sys,os
 # except Exception as e:
 #     raise SystemError(e, sys)
 
-# Reading the Data from csv file 
-path = os.path.join(os.getcwd(), "static",'BankFAQs.csv')
-upath = os.path.join(os.getcwd(), 'static', 'userdata.csv')
+# -----------To create userdata csv file-------------------------------------------
+# user = app_config.userdata
+
+# -----------Reading the Data from csv file ---------------------------------------
 try:
     # obj = app_config()
     data = pd.read_csv(path)
     prep = preprocessing()
-    x = pd.DataFrame(columns=['First Name', 'Last Name', 'Phone Number', 'Email id'])
-    upath = os.path.join(os.getcwd(), 'static', 'userdata.csv')
-    x.to_csv(upath, index=False)
     user = pd.read_csv(upath)
 except Exception as e:
     raise SystemError(e, sys)
 
-
+#-------------Initailzing the App--------------------------------------------------
 app = Flask(__name__)
 
+#-------------Home Page------------------------------------------------------------
 @app.route('/')
 def main():
     return render_template("basic.html")
 
+#-------------Confirm Page---------------------------------------------------------
 @app.route('/confirm')
 def confirm():
     try:
@@ -62,6 +63,7 @@ def confirm():
     except Exception as e:
         raise SystemError(e ,sys)
 
+#---------------------Output Page--------------------------------------------------
 @app.route('/last')
 def last():
     ans = request.args.get('choice')
@@ -77,10 +79,12 @@ def last():
         quslst = [quest_lst['Question'][quest_lst.index[i[1]]] for i in lst[0:5]]
         return render_template('options.html', ques = quslst)
 
+#----------------------Similar Question Page----------------------------------------
 @app.route('/option')
 def option():
     return render_template('option.html')
 
+#---------------------No Answer Page------------------------------------------------
 @app.route('/last2')
 def last2():
     global chs
@@ -92,6 +96,6 @@ def last2():
         word = "I'm not able to solve this question at this moment. You can call to customer support +88 8888 8888 \U0001F615"
         return render_template('last.html', prediction = pred_class, Answer = word)
 
-
+#--------------------Running the App-------------------------------------------------
 if __name__ == "__main__":
     app.run(debug = True)

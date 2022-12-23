@@ -1,6 +1,7 @@
 from mysql import connector
 from pandas import DataFrame
 from exception import SystemError
+from constant import path, upath
 import os, sys
 
 class app_config():
@@ -15,8 +16,6 @@ class app_config():
                         port = int(read[3]),
                         database = read[4])
             print('MYSQL is connected successfully')
-            self.path = os.path.join(os.getcwd(), "static",'BankFAQs.csv')
-            self.upath = os.path.join(os.getcwd(), 'static', 'userdata.csv')
         except Exception as e:
             raise SystemError(e, sys)
     
@@ -33,15 +32,21 @@ class app_config():
                 alst.append(i[1])
                 clst.append(i[2])
             df = DataFrame(list(zip(qlst, alst, clst)), columns=['Question', 'Answer', 'Class'])
-            df.to_csv(self.path)
+            df.to_csv(path)
             return df
         except Exception as e:
             raise SystemError(e, sys)
-        
-
-    def initialise_process(self):
+    
+    def userdata()->DataFrame:
         try:
-            # appdata = self.mysql_connect()
+            x = DataFrame(columns=['First Name', 'Last Name', 'Phone Number', 'Email id'])
+            x.to_csv(upath, index=False)
+            return x
+        except Exception as e:
+            raise SystemError(e, sys)
+
+    def initialise_process(self)->DataFrame:
+        try:
             df = self.convert_data_into_dataframe()
             return df
         except Exception as e:
